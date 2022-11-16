@@ -2,15 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:telemedicine/patients/patient_signup.dart';
-import 'package:telemedicine/admin/signup.dart';
-
-import 'admin_dash.dart';
-import 'signup.dart';
-import '../doctors/doctor_login.dart';
+import 'package:telemedicine/admin/admin_dash.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key, required this.title}) : super(key: key);
+  const LoginPage({Key? key}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -21,7 +16,6 @@ class LoginPage extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-  final String title;
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -104,17 +98,19 @@ class _LoginPageState extends State<LoginPage> {
                   obscureText: true,
                 ),
                 SizedBox(height: 5.0,),
-                Container(
-                  alignment: Alignment(1, 0),
-                  padding: EdgeInsets.only(top: 15, left: 20),
-                  child: InkWell(
-                    child: Text(
-                      'Forgot Password?',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Montserrat',
-                        decoration: TextDecoration.underline
+                GestureDetector(
+                  child: Container(
+                    alignment: Alignment(1, 0),
+                    padding: EdgeInsets.only(top: 15, left: 20),
+                    child: InkWell(
+                      child: Text(
+                        'Forgot Password?',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Montserrat',
+                          decoration: TextDecoration.underline
+                        ),
                       ),
                     ),
                   ),
@@ -156,88 +152,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                   ),
                 ),
-                // GestureDetector(
-                //   onTap:() async{
-                //     print("object");
-                //           if(_key.currentState!.validate()) {
-                //             try{
-                //             await FirebaseAuth.instance.signInWithEmailAndPassword(
-                //             email: _emailController.text.trim(),
-                //             password: _passwordController.text.trim(),
-                //           );
-                //           errorMessage = '';
-                //             }
-                //             on FirebaseAuthException catch (error){
-                //               errorMessage = error.message!;
-                //             }
-                //             Navigator.push(context, MaterialPageRoute(builder: ((context) => AdminPage())));
-                //          }
-                //         },
-                //   child: Container(
-                //     height: 50, 
-                //     child: Material(
-                //       borderRadius: BorderRadius.circular(20),
-                //       shadowColor: Colors.greenAccent,
-                //       color: Colors.black,
-                //       elevation: 7,
-                      
-                //         child: Container(
-                //           child: Center(
-                //             child: Text(
-                //               'LOGIN',
-                //               style: TextStyle(
-                //                 color: Colors.white,
-                //                 fontWeight: FontWeight.bold,
-                //                 fontFamily: 'Montserrat'
-                //               ),
-                //             )
-                //           ),
-                //         )
-                //     ),
-                //   ),
-                // ),
-                SizedBox(height: 15,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    InkWell(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => SignupPage()));
-                      },
-                      child: Text(
-                        'Dont have an account? Register',
-                        style: TextStyle(
-                          color: Colors.blueGrey,
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline
-                        )
-                      ),
-                    )
-                  ],
-                ),
-                SizedBox(height: 60,),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    InkWell(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => P_SignupPage()));
-                      },
-                      child: Text(
-                        'Back',
-                        style: TextStyle(
-                          color: Colors.blueGrey,
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline
-                        )
-                      ),
-                    )
-                  ],
-                ),
-
+                SizedBox(height: 35,),
 
               ],
             ),

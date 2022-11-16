@@ -30,24 +30,6 @@ class _P_LoginPageState extends State<P_LoginPage> {
     Navigator.push(context, MaterialPageRoute(builder: (context) => PatientDash()));
   }
 
-  // void _register() async {
-  //   final User? user = (
-  //     await _auth.createUserWithEmailAndPassword(email: _emailController.text, password: _passwordController.text)
-  //   ).user;
-
-  //   if(user != null){
-  //     setState(() {
-  //       _success =true;
-  //       _UserEmail = user.email!;
-  //     });
-  //   }
-  //   else{
-  //     setState(() {
-  //       _success = false;
-  //     });
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -118,6 +100,9 @@ class _P_LoginPageState extends State<P_LoginPage> {
                         borderRadius: BorderRadius.circular(20),
                         shadowColor: Colors.greenAccent,
                         child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black,
+                          ),
                           onPressed: () async{
                             signIn();
                           },
@@ -136,7 +121,7 @@ class _P_LoginPageState extends State<P_LoginPage> {
                     style: TextStyle(
                       fontFamily: 'Montserrat',
                       fontWeight: FontWeight.bold,
-                      fontSize: 25
+                      fontSize: 18
                     ),
                     ),
                     GestureDetector(
@@ -147,7 +132,7 @@ class _P_LoginPageState extends State<P_LoginPage> {
                       style: TextStyle(
                         fontFamily: 'Monteserrat',
                         fontWeight: FontWeight.bold,
-                        fontSize: 25,
+                        fontSize: 18,
                         decoration: TextDecoration.underline,
                         color: Colors.blue,
                       ),

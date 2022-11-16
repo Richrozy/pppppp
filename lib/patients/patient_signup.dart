@@ -45,7 +45,6 @@ class _P_SignupPageState extends State<P_SignupPage> {
       'firstname': _fnameController.text.trim(),
       'lastname': _lnameController.text.trim(),
       'email': _emailController.text.trim(),
-      'password': _passwordController.text.trim(),
     });
   }
 
@@ -194,13 +193,14 @@ class _P_SignupPageState extends State<P_SignupPage> {
                 ),
                 SizedBox(height: 15,),
                 Row(
+                  
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text("Already have an account?",
                     style: TextStyle(
                       fontFamily: 'Montserrat',
                       fontWeight: FontWeight.bold,
-                      fontSize: 25,
+                      fontSize: 18,
                     ),
                     ),
                     GestureDetector(
@@ -211,7 +211,7 @@ class _P_SignupPageState extends State<P_SignupPage> {
                       style: TextStyle(
                         fontFamily: 'Monteserrat',
                         fontWeight: FontWeight.bold,
-                        fontSize: 25,
+                        fontSize: 18,
                         decoration: TextDecoration.underline,
                         color: Colors.blue,
                       ),

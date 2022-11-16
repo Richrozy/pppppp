@@ -5,12 +5,12 @@ import 'package:telemedicine/doctors/doctor_login.dart';
 import 'package:telemedicine/patients/patient_login.dart';
 
 
-class Home extends StatefulWidget{
+class HomePage extends StatefulWidget{
   @override
-  _HomeState createState() => _HomeState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _HomeState extends State<Home> {
+class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
@@ -18,90 +18,104 @@ class _HomeState extends State<Home> {
     return new Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 26, 23, 23),
-        leading: Text("HOME", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),),
+        title: Text("Dashboard",
+        style: TextStyle(
+          fontFamily: 'Montserrat',
+          fontWeight: FontWeight.bold,
+          fontSize: 30
+        ),
+        )
       ),
       body: Container(
-        child: new SingleChildScrollView(
-          child: new Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                child: Stack(
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.fromLTRB(15, 110, 0, 0),
-                      child: Text('Select Account',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 40,
-                      ),
-                      ),
-                    )
-                  ],
+        child: Padding(
+          padding: const EdgeInsets.all(30.0),
+          child: GridView(
+            children: [
+              GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Color.fromARGB(255, 39, 6, 100),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.person_outline_outlined, size: 60, color: Colors.white,),
+                      Text("Admin", style: TextStyle(color: Colors.white, fontSize: 22, fontFamily: "Montserrat", fontWeight: FontWeight.bold),)
+                    ],
+                  ),
                 ),
               ),
-              SizedBox(height: 30,),
-
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: ListView(
-                  children: [
-                    GestureDetector(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => P_LoginPage()));
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("Patient", style: TextStyle(color: Colors.white, fontSize: 22, fontFamily: "Montserrat", fontWeight: FontWeight.bold),)
-                          ],
-                        ),
+              GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => P_LoginPage()));
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Color.fromARGB(255, 18, 59, 71),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.medication, size: 60, color: Colors.white,),
+                      Text("Patient",
+                      style: TextStyle(
+                        color: Colors.white, 
+                        fontSize: 22,
+                         fontFamily: "Montserrat", 
+                         fontWeight: FontWeight.bold
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => D_LoginPage()));
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("Doctor", style: TextStyle(color: Colors.white, fontSize: 22, fontFamily: "Montserrat", fontWeight: FontWeight.bold),)
-                          ],
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage(title: 'Telemedicine',)));
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("Admin", style: TextStyle(color: Colors.white, fontSize: 22, fontFamily: "Montserrat", fontWeight: FontWeight.bold),)
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
+                    )
+                    ],
+                  ),
                 ),
-              )
-
+              ),
+              GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => D_LoginPage()));
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Color.fromARGB(255, 77, 8, 3),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.medical_services, size: 60, color: Colors.white,),
+                      Text("Doctor", style: TextStyle(color: Colors.white, fontSize: 22, fontFamily: "Montserrat", fontWeight: FontWeight.bold),)
+                    ],
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: (){
+                  //
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Color.fromARGB(255, 45, 109, 8),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.exit_to_app_outlined, size: 60, color: Colors.white,),
+                      Text("Exit App", style: TextStyle(color: Colors.white, fontSize: 22, fontFamily: "Montserrat", fontWeight: FontWeight.bold),)
+                    ],
+                  ),
+                ),
+              ),
             ],
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10
+            ),
           ),
         )
       )

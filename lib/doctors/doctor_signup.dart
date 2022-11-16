@@ -4,34 +4,68 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:telemedicine/admin/login.dart';
 import 'package:telemedicine/main.dart';
+import 'package:telemedicine/doctors/doctor_login.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
-class SignupPage extends StatefulWidget{
+class D_SignupPage extends StatefulWidget{
   @override
-  _SignupPageState createState() => _SignupPageState();
+  _D_SignupPageState createState() => _D_SignupPageState();
 }
 
-class _SignupPageState extends State<SignupPage> {
+class _D_SignupPageState extends State<D_SignupPage> {
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmpasswordController = TextEditingController();
   final TextEditingController _fnameController = TextEditingController();
   final TextEditingController _lnameController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
+  final TextEditingController _specialityController = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   String errorMessage = '';
-  bool isLoading = false;
+
+  Future signUp() async{
+    if(passwordConfirmed()){
+      //create user
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(), 
+        password: _passwordController.text.trim()
+      );
+
+      //add details to firestore db
+      addDetails();
+      Navigator.push(context, MaterialPageRoute(builder: (context) => D_LoginPage()));
+    }
+  }
+
+  Future addDetails() async{
+    await FirebaseFirestore.instance.collection('Doctors').add({
+      'firstname': _fnameController.text.trim(),
+      'lastname': _lnameController.text.trim(),
+      'email': _emailController.text.trim(),
+      'age': int.parse(_ageController.text.trim()),
+      'speciality': _specialityController.text.trim(),
+    });
+  }
+
+  bool passwordConfirmed(){
+    if(_passwordController.text.trim() == _confirmpasswordController.text.trim()){
+      return true;
+    }
+    else{
+      errorMessage = "Passwords don't match";
+      return false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    User? user = FirebaseAuth.instance.currentUser;
+    final user = FirebaseAuth.instance.currentUser;
     return new Scaffold(
-      appBar: AppBar(
-        title: Text("TeleMed",
-        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-      ),
-
       body: Form(
         key: _key,
       child: new SingleChildScrollView(
@@ -46,7 +80,7 @@ class _SignupPageState extends State<SignupPage> {
                   child: Text('REGISTER',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 40,
+                    fontSize: 30,
                   ),
                   ),
                 )
@@ -107,6 +141,38 @@ class _SignupPageState extends State<SignupPage> {
                 SizedBox(height: 20,),
 
                 TextFormField(
+                  controller: _ageController,
+                  decoration: InputDecoration(
+                    labelText: "Age",
+                    labelStyle: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey,
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.green),
+                    )
+                  ),
+                ),
+                SizedBox(height: 20,),
+
+                TextFormField(
+                  controller: _specialityController,
+                  decoration: InputDecoration(
+                    labelText: "Speciality",
+                    labelStyle: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey,
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.green),
+                    )
+                  ),
+                ),
+                SizedBox(height: 20,),
+
+                TextFormField(
                   controller: _passwordController,
                   validator: validatePassword,
                   decoration: InputDecoration(
@@ -122,83 +188,75 @@ class _SignupPageState extends State<SignupPage> {
                   ),
                   obscureText: true,
                 ),
-                SizedBox(height: 60,),
-                
-                Padding(
-                  padding: EdgeInsets.all(12.0),
-                  child: Center(
-                    child: Text(
-                      errorMessage
+                SizedBox(height: 20,),
+
+                TextFormField(
+                  controller: _confirmpasswordController,
+                  validator: validatePassword,
+                  decoration: InputDecoration(
+                    labelText: "Confirm Password",
+                    labelStyle: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey,
                     ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.green),
+                    )
                   ),
+                  obscureText: true,
                 ),
+                SizedBox(height: 10,),
+                Container(
+                  child: Text(errorMessage),
+                ),
+                SizedBox(height: 10,),
+                
                 
                 Container(
-                  height: 50, 
+                  height: 40,
                   child: Material(
+                    elevation: 7,
                     borderRadius: BorderRadius.circular(20),
                     shadowColor: Colors.greenAccent,
-                    color: Colors.black,
-                    elevation: 7,
-                    child: GestureDetector(
-                      onTap: 
-                      user != null ? null:
-                      () async{
-                        final isValid = _key.currentState!.validate();
-                        if(!isValid) return;
-                        showDialog(
-                          context: context, 
-                          builder: (context) => const Center(child: CircularProgressIndicator()),
-                        );
-                        try{
-                        FirebaseAuth.instance.createUserWithEmailAndPassword(
-                          email: _emailController.text,
-                          password: _passwordController.text);
-                          errorMessage = '';
-                        }
-                        on FirebaseAuthException catch (error){
-                          errorMessage = error.message!;
-                        }
-                          
-                          setState(() {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
-                          });
-                        
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                      ),
+                      onPressed: () async{
+                        signUp();
                       },
-                      child: Center(
-                        child: Text(
-                          'SIGNUP',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Montserrat'
-                          ),
-                        )
-                      )
+                      child: const Text("SIGNUP",
+                      style: TextStyle(color: Colors.white, fontFamily: "Montserrat", fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                 ),
                 SizedBox(height: 15,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    InkWell(
+                  children: [
+                    Text("Already have an account?",
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                    ),
+                    GestureDetector(
                       onTap: (){
-                        FirebaseAuth.instance.signOut().then((value){
-                        Navigator.push(context, MaterialPageRoute(builder: ((context) => MyApp())));
-                        });
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => D_LoginPage()));
                       },
-                      child: Text(
-                        'Already have an account? Login',
-                        style: TextStyle(
-                          color: Colors.blueGrey,
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline
-                        )
+                      child: Text("Login",
+                      style: TextStyle(
+                        fontFamily: 'Monteserrat',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        decoration: TextDecoration.underline,
+                        color: Colors.blue,
                       ),
-                      
-                    )
+                      ),
+                    ),
                   ],
                 ),
                 SizedBox(height: 60,),
@@ -231,11 +289,11 @@ String? validatePassword(String? formPassword) {
   if(formPassword == null || formPassword.isEmpty){
     return 'Password is required';
   }
-  String pattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$&*~]).{8,}$';
+  String pattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,}$';
   RegExp regex = RegExp(pattern);
   if(!regex.hasMatch(formPassword)){
-    return '''Password must be atleast 8 characters long, 
-    include an uppercase letter, number and symbol''';
+    return '''Password must be atleast 6 characters long, 
+    include an uppercase letter and a digit''';
   }
 
   return null;
